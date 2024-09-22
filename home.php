@@ -88,7 +88,9 @@
             <button type="submit" class="btn bg-gray-700 text-white border-none p-2 w-full">Enviar</button>
         </form>
         <div class="mt-4">
-            <a name="csv" class="btn bg-green-700 text-white border-none p-2 w-full text-center">Descargar Informe CSV</a>
+            <form method="POST" action="home.php">
+                <button type="submit" name="csv" class="btn bg-green-700 text-white border-none p-2 w-full text-center">Descargar Informe CSV</button>
+            </form>
         </div>
     </div>
 </body>

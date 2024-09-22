@@ -1,3 +1,23 @@
+<?php
+require 'database.php';
+
+if (!empty($_POST['username']) && !empty($_POST['password'])) { //Verificar si los campos no estan vacios
+    $records = $conn->prepare('SELECT id, username, password FROM users WHERE username = :username'); //Preparar la consulta
+    $records->bindParam(':username', $_POST['username']); //Asignar valores a los parametros
+    $records->execute(); //Ejecutar la consulta
+    $results = $records->fetch(PDO::FETCH_ASSOC); //Obtener los resultados
+
+    $message = ''; //Variable para almacenar mensajes
+
+    if (count($results) > 0 && password_verify($_POST['password'], $results['password'])) { //Verificar si el usuario existe y la contraseña es correcta
+        $_SESSION['user_id'] = $results['id']; // Almacenar el id del usuario en la sesion
+        header("Location: home.php"); //Redirigir a home.php
+    } else {
+        $message = 'Lo siento, las credenciales no coinciden';
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,24 +48,3 @@
     </div>
 </body>
 </html>
-
-<?php
-require 'database.php';
-
-if (!empty($_POST['username']) && !empty($_POST['password'])) { //Verificar si los campos no estan vacios
-    $records = $conn->prepare('SELECT id, username, password FROM users WHERE username = :username'); //Preparar la consulta
-    $records->bindParam(':username', $_POST['username']); //Asignar valores a los parametros
-    $records->execute(); //Ejecutar la consulta
-    $results = $records->fetch(PDO::FETCH_ASSOC); //Obtener los resultados
-
-    $message = ''; //Variable para almacenar mensajes
-
-    if (count($results) > 0 && password_verify($_POST['password'], $results['password'])) { //Verificar si el usuario existe y la contraseña es correcta
-        $_SESSION['user_id'] = $results['id']; // Almacenar el id del usuario en la sesion
-        header("Location: home.php"); //Redirigir a home.php
-    } else {
-        $message = 'Lo siento, las credenciales no coinciden';
-    }
-}
-
-?>
