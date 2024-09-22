@@ -13,7 +13,7 @@
             <h1 class=" text-2xl text-white">Sistema de Reclutamiento SoftCorp & Co</h1>
             <ul class="flex">
                 <li class="mr-6">
-                    <a href="index.php" class="text-xl text-white">Cerrar Sesion</a>
+                    <a name="cerrarS" href="index.php" class="text-xl text-white">Cerrar Sesion</a>
                 </li>
             </ul>
         </div>
@@ -88,7 +88,7 @@
             <button type="submit" class="btn bg-gray-700 text-white border-none p-2 w-full">Enviar</button>
         </form>
         <div class="mt-4">
-            <a id="csv" class="btn bg-green-700 text-white border-none p-2 w-full text-center">Descargar Informe CSV</a>
+            <a name="csv" class="btn bg-green-700 text-white border-none p-2 w-full text-center">Descargar Informe CSV</a>
         </div>
     </div>
 </body>
@@ -96,7 +96,6 @@
 
 <?php
 require 'database.php';
-include 'csv.php';
 
 function validateInput($data) {
     $errors = [];
@@ -204,6 +203,28 @@ function closeSession() {
     session_destroy();
     header('Location: index.php');
     exit();
+}
+
+//descargar el archivo csv
+if (isset($_POST['csv'])) {
+    $sql = "SELECT * FROM candidatos";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $candidatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Generar el archivo CSV
+    $filename = 'candidatos.csv'; // Nombre del archivo
+    header('Content-Type: text/csv'); // Tipo de contenido
+    header('Content-Disposition: attachment; filename="' . $filename . '";'); // Encabezado de descarga
+
+    $output = fopen('php://output', 'w'); // Abrir el archivo de salida
+    fputcsv($output, array_keys($candidatos[0])); 
+
+    foreach ($candidatos as $candidato) { // Recorrer los candidatos
+        fputcsv($output, $candidato); // Escribir los datos del candidato en el archivo
+    }
+
+    fclose($output); // Cerrar el archivo
 }
 
 ?>
