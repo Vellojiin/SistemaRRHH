@@ -48,6 +48,8 @@ if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['pass
 
     if ($stmt->execute()) { //Ejecutar la consulta
         $message = 'Usuario creado exitosamente'; //Mensaje de exito
+        $_SESSION['user_id'] = $results['id']; // Almacenar el id del usuario en la sesion
+        header("Location: home.php"); //Redirigir a home.php
     } else {
         $message = 'Lo siento, hubo un problema al crear tu cuenta'; //Mensaje de error
     }
