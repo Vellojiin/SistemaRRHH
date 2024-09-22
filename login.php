@@ -47,3 +47,5 @@ if (!empty($_POST['username']) && !empty($_POST['password'])) { //Verificar si l
         $message = 'Lo siento, las credenciales no coinciden';
     }
 }
+
+?>

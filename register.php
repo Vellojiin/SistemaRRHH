@@ -54,3 +54,5 @@ if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['pass
         $message = 'Lo siento, hubo un problema al crear tu cuenta'; //Mensaje de error
     }
 }
+
+?>

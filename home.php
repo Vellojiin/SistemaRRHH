@@ -14,7 +14,7 @@
             <ul class="flex">
                 
                 <li class="mr-6">
-                    <a href="index.php" class="text-xl text-white">Cerrar Sesion</a>
+                    <a href="index.php" id="cerrarS" class="text-xl text-white">Cerrar Sesion</a>
                 </li>
                 
     </nav>
@@ -66,6 +66,7 @@
             <div class="mb-4">
             <select class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
                 <option value="" disabled selected>Nacionalidad</option>
+                <option value="panamena">Panameña</option>
                 <option value="dominicana">Dominicana</option>
                 <option value="estadounidense">Estadounidense</option>
                 <option value="mexicana">Mexicana</option>
@@ -89,7 +90,7 @@
             <button type="submit" class="btn bg-gray-700 text-white border-none p-2 w-full">Enviar</button>
         </form>
         <div class="mt-4">
-            <a href="download_report.php" class="btn bg-green-700 text-white border-none p-2 w-full text-center">Descargar Informe CSV</a>
+            <a id="csv" class="btn bg-green-700 text-white border-none p-2 w-full text-center">Descargar Informe CSV</a>
         </div>
     </div>
 </body>
@@ -98,3 +99,101 @@
 <?php
 
 require 'database.php';
+
+function validateInput($data) {
+    $errors = [];
+
+    // Validate cedula
+    if (!preg_match('/^[A-Za-z0-9]{1,2}[0-9]{10}$/', $data['cedula'])) {
+        $errors[] = 'Cédula inválida';
+    }
+
+    // Validate nombre
+    if (strlen($data['nombre']) > 50) {
+        $errors[] = 'Nombre demasiado largo';
+    }
+
+    // Validate apellido
+    if (strlen($data['apellido']) > 50) {
+        $errors[] = 'Apellido demasiado largo';
+    }
+
+    // Validate estado_civil
+    $valid_estado_civil = ['soltero', 'casado', 'divorciado', 'viudo'];
+    if (!in_array($data['estado_civil'], $valid_estado_civil)) {
+        $errors[] = 'Estado civil inválido';
+    }
+
+    // Validate genero
+    $valid_genero = ['masculino', 'femenino'];
+    if (!in_array($data['genero'], $valid_genero)) {
+        $errors[] = 'Género inválido';
+    }
+
+    // Validate tipo_sangre
+    $valid_tipo_sangre = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+    if (!in_array($data['tipo_sangre'], $valid_tipo_sangre)) {
+        $errors[] = 'Tipo de sangre inválido';
+    }
+
+    // Validate fecha_nacimiento
+    if (!strtotime($data['fecha_nacimiento'])) {
+        $errors[] = 'Fecha de nacimiento inválida';
+    }
+
+    // Validate nacionalidad
+    $valid_nacionalidad = ['panamena', 'dominicana', 'estadounidense', 'mexicana', 'colombiana', 'venezolana', 'argentina', 'chilena', 'peruana', 'brasilena'];
+    if (!in_array($data['nacionalidad'], $valid_nacionalidad)) {
+        $errors[] = 'Nacionalidad inválida';
+    }
+
+    // Validate telefono
+    if (!preg_match('/^[0-9]{8}$/', $data['telefono'])) {
+        $errors[] = 'Teléfono inválido';
+    }
+
+    // Validate residencia
+    if (strlen($data['residencia']) > 150) {
+        $errors[] = 'Residencia demasiado larga';
+    }
+
+    // Validate email
+    if (strlen($data['email']) > 150 || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'Correo electrónico inválido';
+    }
+
+    return $errors;
+}
+
+$errors = validateInput($_POST); //Validar los datos enviados por el formulario
+if (!empty($errors)) { //Verificar si hay errores
+    foreach ($errors as $error) { //Recorrer los errores
+        echo "<p>$error</p>"; //Mostrar los errores
+    }
+} else {
+    echo "<p>Formulario enviado correctamente</p>"; //Mensaje de exito
+        if (!empty($_POST['cedula']) && !empty($_POST['nombre']) && !empty($_POST['apellido']) && !empty($_POST['estado_civil']) && !empty($_POST ['genero']) && !empty($_POST['tipo_sangre']) && !empty($_POST['fecha_nacimiento']) && !empty($_POST['nacionalidad']) && !empty($_POST['telefono']) && !empty($_POST['residencia']) && !empty($_POST['email'])) { //Verificar si los campos no estan vacios
+            $sql = "INSERT INTO candidatos (cedula, nombre, apellido, estado_civil, genero, tipo_sangre, fecha_nacimiento, nacionalidad, telefono, residencia, email) VALUES (:cedula, :nombre, :apellido, :estado_civil, :genero, :tipo_sangre, :fecha_nacimiento, :nacionalidad, :telefono, :residencia, :email)"; //Preparar la consulta
+            $stmt = $conn->prepare($sql); //Preparar la consulta
+            $stmt->bindParam(':cedula', $_POST['cedula']); 
+            $stmt->bindParam(':nombre', $_POST['nombre']); 
+            $stmt->bindParam(':apellido', $_POST['apellido']); //
+            $stmt->bindParam(':estado_civil', $_POST['estado_civil']);
+            $stmt->bindParam(':genero', $_POST['genero']);
+            $stmt->bindParam(':tipo_sangre', $_POST['tipo_sangre']);
+            $stmt->bindParam(':fecha_nacimiento', $_POST['fecha_nacimiento']);
+            $stmt->bindParam(':nacionalidad', $_POST['nacionalidad']);
+            $stmt->bindParam(':telefono', $_POST['telefono']);
+            $stmt->bindParam(':residencia', $_POST['residencia']);
+            $stmt->bindParam(':email', $_POST['email']);
+        
+            if ($stmt->execute()) { //Ejecutar la consulta
+                $message = 'Candidato creado exitosamente'; //Mensaje de exito
+            } else {
+                $message = 'Lo siento, hubo un problema al crear el candidato';
+            }
+    }
+    exit;
+}
+
+?>
