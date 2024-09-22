@@ -12,80 +12,78 @@
         <div class="container mx-auto flex justify-between">
             <h1 class=" text-2xl text-white">Sistema de Reclutamiento SoftCorp & Co</h1>
             <ul class="flex">
-                
                 <li class="mr-6">
-                    <a href="index.php" id="cerrarS" class="text-xl text-white">Cerrar Sesion</a>
+                    <a href="index.php" class="text-xl text-white">Cerrar Sesion</a>
                 </li>
-                
+            </ul>
+        </div>
     </nav>
     <div class="container mx-auto p-4">
-        <form>
+        <form method="POST" action="home.php">
             <div class="mb-4">
-            <input type="text" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Cédula o Pasaporte" required>
+                <input type="text" name="cedula" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Cédula o Pasaporte" required>
             </div>
             <div class="mb-4">
-            <input type="text" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Nombre" required>
+                <input type="text" name="nombre" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Nombre" required>
             </div>
             <div class="mb-4">
-            <input type="text" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Apellido" required>
+                <input type="text" name="apellido" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Apellido" required>
             </div>
             <div class="mb-4">
-            <select class="form-control bg-gray-700 text-white border-none p-2 w-full" >
-                <option value="" disabled selected>Estado Civil</option>
-                <option value="soltero">Soltero</option>
-                <option value="casado">Casado</option>
-                <option value="divorciado">Divorciado</option>
-                <option value="viudo">Viudo</option>
-            </select>
-        </div>
-            <div class="mb-4">
-            <select class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
-                <option value="" disabled selected>Genero</option>
-                <option value="masculino">Masculino</option>
-                <option value="femenino">Femenino</option>
-                
-            </select>
+                <select name="estado_civil" class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
+                    <option value="" disabled selected>Estado Civil</option>
+                    <option value="soltero">Soltero</option>
+                    <option value="casado">Casado</option>
+                    <option value="divorciado">Divorciado</option>
+                    <option value="viudo">Viudo</option>
+                </select>
             </div>
             <div class="mb-4">
-            <select class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
-                <option value="" disabled selected>Tipo de Sangre</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-            </select>
-            </div>
-
-            <div class="mb-4">
-            <input type="date" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Fecha de Nacimiento" required>
+                <select name="genero" class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
+                    <option value="" disabled selected>Genero</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                </select>
             </div>
             <div class="mb-4">
-            <select class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
-                <option value="" disabled selected>Nacionalidad</option>
-                <option value="panamena">Panameña</option>
-                <option value="dominicana">Dominicana</option>
-                <option value="estadounidense">Estadounidense</option>
-                <option value="mexicana">Mexicana</option>
-                <option value="colombiana">Colombiana</option>
-                <option value="venezolana">Venezolana</option>
-                <option value="argentina">Argentina</option>
-                <option value="chilena">Chilena</option>
-                <option value="peruana">Peruana</option>
-                <option value="brasilena">Brasileña</option>
-            </select>
+                <select name="tipo_sangre" class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
+                    <option value="" disabled selected>Tipo de Sangre</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
             </div>
             <div class="mb-4">
-            <input type="text" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Teléfono" required>
+                <input type="date" name="fecha_nacimiento" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Fecha de Nacimiento" required>
             </div>
             <div class="mb-4">
-            <input type="text" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Residencia" required>
+                <select name="nacionalidad" class="form-control bg-gray-700 text-white border-none p-2 w-full" required>
+                    <option value="" disabled selected>Nacionalidad</option>
+                    <option value="panamena">Panameña</option>
+                    <option value="dominicana">Dominicana</option>
+                    <option value="estadounidense">Estadounidense</option>
+                    <option value="mexicana">Mexicana</option>
+                    <option value="colombiana">Colombiana</option>
+                    <option value="venezolana">Venezolana</option>
+                    <option value="argentina">Argentina</option>
+                    <option value="chilena">Chilena</option>
+                    <option value="peruana">Peruana</option>
+                    <option value="brasilena">Brasileña</option>
+                </select>
             </div>
             <div class="mb-4">
-            <input type="email" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Correo Electrónico" required>
+                <input type="text" name="telefono" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Teléfono" required>
+            </div>
+            <div class="mb-4">
+                <input type="text" name="residencia" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Residencia" required>
+            </div>
+            <div class="mb-4">
+                <input type="email" name="email" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Correo Electrónico" required>
             </div>
             <button type="submit" class="btn bg-gray-700 text-white border-none p-2 w-full">Enviar</button>
         </form>
@@ -97,8 +95,8 @@
 </html>
 
 <?php
-
 require 'database.php';
+include 'csv.php';
 
 function validateInput($data) {
     $errors = [];
@@ -165,19 +163,20 @@ function validateInput($data) {
     return $errors;
 }
 
-$errors = validateInput($_POST); //Validar los datos enviados por el formulario
-if (!empty($errors)) { //Verificar si hay errores
-    foreach ($errors as $error) { //Recorrer los errores
-        echo "<p>$error</p>"; //Mostrar los errores
-    }
-} else {
-    echo "<p>Formulario enviado correctamente</p>"; //Mensaje de exito
-        if (!empty($_POST['cedula']) && !empty($_POST['nombre']) && !empty($_POST['apellido']) && !empty($_POST['estado_civil']) && !empty($_POST ['genero']) && !empty($_POST['tipo_sangre']) && !empty($_POST['fecha_nacimiento']) && !empty($_POST['nacionalidad']) && !empty($_POST['telefono']) && !empty($_POST['residencia']) && !empty($_POST['email'])) { //Verificar si los campos no estan vacios
-            $sql = "INSERT INTO candidatos (cedula, nombre, apellido, estado_civil, genero, tipo_sangre, fecha_nacimiento, nacionalidad, telefono, residencia, email) VALUES (:cedula, :nombre, :apellido, :estado_civil, :genero, :tipo_sangre, :fecha_nacimiento, :nacionalidad, :telefono, :residencia, :email)"; //Preparar la consulta
-            $stmt = $conn->prepare($sql); //Preparar la consulta
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $errors = validateInput($_POST); // Validar los datos enviados por el formulario
+    if (!empty($errors)) { // Verificar si hay errores
+        foreach ($errors as $error) { // Recorrer los errores
+            echo "<p>$error</p>"; // Mostrar los errores
+        }
+    } else {
+        echo "<p>Formulario enviado correctamente</p>"; // Mensaje de éxito
+        if (!empty($_POST['cedula']) && !empty($_POST['nombre']) && !empty($_POST['apellido']) && !empty($_POST['estado_civil']) && !empty($_POST['genero']) && !empty($_POST['tipo_sangre']) && !empty($_POST['fecha_nacimiento']) && !empty($_POST['nacionalidad']) && !empty($_POST['telefono']) && !empty($_POST['residencia']) && !empty($_POST['email'])) { // Verificar si los campos no están vacíos
+            $sql = "INSERT INTO candidatos (cedula, nombre, apellido, estado_civil, genero, tipo_sangre, fecha_nacimiento, nacionalidad, telefono, residencia, email) VALUES (:cedula, :nombre, :apellido, :estado_civil, :genero, :tipo_sangre, :fecha_nacimiento, :nacionalidad, :telefono, :residencia, :email)"; 
+            $stmt = $conn->prepare($sql); 
             $stmt->bindParam(':cedula', $_POST['cedula']); 
             $stmt->bindParam(':nombre', $_POST['nombre']); 
-            $stmt->bindParam(':apellido', $_POST['apellido']); //
+            $stmt->bindParam(':apellido', $_POST['apellido']); 
             $stmt->bindParam(':estado_civil', $_POST['estado_civil']);
             $stmt->bindParam(':genero', $_POST['genero']);
             $stmt->bindParam(':tipo_sangre', $_POST['tipo_sangre']);
@@ -187,13 +186,24 @@ if (!empty($errors)) { //Verificar si hay errores
             $stmt->bindParam(':residencia', $_POST['residencia']);
             $stmt->bindParam(':email', $_POST['email']);
         
-            if ($stmt->execute()) { //Ejecutar la consulta
-                $message = 'Candidato creado exitosamente'; //Mensaje de exito
+            if ($stmt->execute()) { // Ejecutar la consulta
+                $message = 'Candidato creado exitosamente'; // Mensaje de éxito
             } else {
                 $message = 'Lo siento, hubo un problema al crear el candidato';
             }
+        }
     }
-    exit;
+}
+
+if (isset($_POST['cerrarS'])) {
+    closeSession();
+}
+
+function closeSession() {
+    session_start();
+    session_destroy();
+    header('Location: index.php');
+    exit();
 }
 
 ?>
