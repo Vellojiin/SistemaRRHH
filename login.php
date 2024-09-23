@@ -12,7 +12,7 @@ $message = '';
 if ((empty($nombre_usuario) or empty($contrasena))) {
     $message = '';
 } else if (!isValidUsername($nombre_usuario)) {
-    $message = 'Los datos ingresados son invalidos!';
+    $message = 'El nombre de usuario contiene carácteres no permitidos, revíselos e intente nuevamente';
 } else {
     $conn = Database::Conectar();
 

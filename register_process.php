@@ -8,9 +8,12 @@ $pdo = Database::Conectar();
 $nombre_usuario = $_POST['username'];
 $nombre_usuario_sanitizado = preg_replace(INVALID_USERNAME_PATTERN, '', $nombre_usuario);
 $correo = $_POST['email'];
+$contrasena = $_POST['password'];
 
 if ((empty($nombre_usuario) or empty($correo)) or !isValidUsername($nombre_usuario)) {
-    echo json_encode(["error" =>  "revisalos e intentalo nuevamente!"]);
+    echo json_encode(["error" =>  "el nombre de usuario o  el correo son invalidos, revisalos e intentalo nuevamente!"]);
+} else if (!isValidPassword($contrasena)) {
+    echo json_encode(["error" =>  "La contraseña debe tener 8 carácteres mínimo, combinación de números, letras y carácteres especiales."]);
 } else if (!$pdo) {
     echo json_encode(["error" => "Error al conectar a la base de datos."]);
 } else {
@@ -60,4 +63,3 @@ if ((empty($nombre_usuario) or empty($correo)) or !isValidUsername($nombre_usuar
 
 // Cerrar la conexión (opcional, ya que PDO se cierra automáticamente al final del script)
 $pdo = null;
-?>
