@@ -136,28 +136,6 @@ function closeSession()
     exit();
 }
 
-
-//descargar el archivo csv
-if (isset($_POST['csv'])) {
-    $sql = "SELECT * FROM candidatos";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $candidatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Generar el archivo CSV
-    $filename = 'candidatos.csv'; // Nombre del archivo
-    header('Content-Type: text/csv'); // Tipo de contenido
-    header('Content-Disposition: attachment; filename="' . $filename . '";'); // Encabezado de descarga
-
-    $output = fopen('php://output', 'w'); // Abrir el archivo de salida
-    fputcsv($output, array_keys($candidatos[0]));
-
-    foreach ($candidatos as $candidato) { // Recorrer los candidatos
-        fputcsv($output, $candidato); // Escribir los datos del candidato en el archivo
-    }
-
-    fclose($output); // Cerrar el archivo
-}
 ?>
 
 
@@ -258,14 +236,10 @@ if (isset($_POST['csv'])) {
             <div class="mb-4">
                 <input type="email" name="email" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Correo Electrónico" required>
             </div>
-            <button type="submit" name="submit_form" class="btn bg-gray-700 text-white border-none p-2 w-full">Enviar</button>
+            <button type="submit" name="submit_form" class="btn bg-green-700 text-white border-none p-2 w-full">Enviar</button>
 
         </form>
-        <div class="mt-4">
-            <form method="POST" action="home.php">
-                <button type="submit" name="csv" class="btn bg-green-700 text-white border-none p-2 w-full text-center">Descargar Informe CSV</button>
-            </form>
-        </div>
+        
         <?php
         if (!empty($message)) {
             echo "<div class='mt-4 p-4 border border-gray-600 bg-gray-700 rounded'>$message</div>";
