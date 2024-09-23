@@ -30,7 +30,7 @@ if (!empty($_POST['username']) && !empty($_POST['password'])) { //Verificar si l
     <div class="min-h-screen flex items-center justify-center">
         <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
             <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
-            <form action="login_process.php" method="POST">
+            <form action="home.php" method="POST">
                 <div class="mb-4">
                     <label for="username" class="block text-sm font-medium mb-2">Usuario</label>
                     <input type="text" id="username" name="username" class="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
