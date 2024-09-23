@@ -1,7 +1,22 @@
 <?php
 session_start();
 require 'database.php';
+require 'utils.php';
 $message = '';
+$username = '';
+
+$conn = Database::Conectar();
+$records = $conn->prepare('SELECT nombre_usuario FROM usuarios WHERE id = :id'); //Preparar la consulta
+$user_id = $_SESSION['user_id'];
+$records->bindParam(':id', $user_id); //Asignar valores a los parametros
+$records->execute(); //Ejecutar la consulta
+$results = $records->fetch(PDO::FETCH_ASSOC); //Obtener los resultados
+
+if (count($results) >= 1) {
+    $username = preg_replace(INVALID_USERNAME_PATTERN, '', $results['nombre_usuario'] ?? '');
+}
+
+
 
 function validateInput($data)
 {
@@ -161,11 +176,18 @@ if (isset($_POST['csv'])) {
         <!-- Navbar content -->
         <div class="container mx-auto flex justify-between">
             <h1 class=" text-2xl text-white">Sistema de Reclutamiento SoftCorp & Co</h1>
-            <ul class="flex">
-                <li class="mr-6">
-                    <a name="cerrarS" href="index.php" class="text-xl text-white">Cerrar Sesion</a>
-                </li>
-            </ul>
+            <div class="flex flex-row">
+                <p class="text-xl mx-4">
+                    <?php
+                    echo $username
+                    ?>
+                </p>
+                <ul class="flex">
+                    <li class="mr-6">
+                        <a name="cerrarS" href="index.php" class="text-xl text-white">Cerrar Sesion</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container mx-auto p-4">
