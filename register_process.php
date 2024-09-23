@@ -1,14 +1,21 @@
 <?php
 // Incluir la clase de conexión
 require_once 'Database.php';
+require 'utils.php';
 
 // Conectar a la base de datos
 $pdo = Database::Conectar();
+$nombre_usuario = $_POST['username'];
+$nombre_usuario_sanitizado = preg_replace(INVALID_USERNAME_PATTERN, '', $nombre_usuario);
+$correo = $_POST['email'];
 
-if ($pdo) {
+if ((empty($nombre_usuario) or empty($correo)) or !isValidUsername($nombre_usuario)) {
+    echo "Algunos datos son invalidos, revisalos e intentalo nuevamente!";
+} else if (!$pdo) {
+    echo "Error al conectar con la base de datos";
+} else {
+
     // Recibir los datos del formulario
-    $nombre_usuario = $_POST['username'];
-    $correo = $_POST['email'];
     $contrasena = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash de la contraseña
 
     // Preparar la consulta SQL para insertar el nuevo usuario
@@ -16,7 +23,7 @@ if ($pdo) {
     $stmt = $pdo->prepare($sql);
 
     // Asignar valores a los parámetros
-    $stmt->bindParam(':nombre_usuario', $nombre_usuario);
+    $stmt->bindParam(':nombre_usuario', $nombre_usuario_sanitizado);
     $stmt->bindParam(':correo', $correo);
     $stmt->bindParam(':contrasena', $contrasena);
 
@@ -24,12 +31,9 @@ if ($pdo) {
     if ($stmt->execute()) {
         header('Location: home.php');
     } else {
-        echo "Error en el registro. Intenta de nuevo.";
+        $message = "Error en el registro. Intenta de nuevo.";
     }
-} else {
-    echo "Error al conectar a la base de datos.";
 }
 
 // Cerrar la conexión (opcional, ya que PDO se cierra automáticamente al final del script)
 $pdo = null;
-?>
