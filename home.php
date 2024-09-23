@@ -22,7 +22,7 @@ function validateInput($data)
 {
     $errors = [];
 
-    if (!preg_match('/^(?:\d{1}-\d{4}-\d{3}|\d{7}|\d{8}|\w{2}-\d{7}|\w{2}-\d{8})$/', $data['cedula'])) {
+    if (!preg_match('/^(?:\d{1}-\d{4}-\d{3,5}|[A-Z]{1,2}-\d{7,8}|PE-\d{7,8})$/i', $data['cedula'])) {
         $errors[] = 'Cédula o pasaporte inválido';
     }
 
@@ -67,8 +67,8 @@ function validateInput($data)
     }
 
     // Validate telefono
-    if (!preg_match('/^[0-9]{8}$/', $data['telefono'])) {
-        $errors[] = 'Teléfono inválido';
+    if (!preg_match('/^(6\d{7}|[23]\d{7})$/', $data['telefono'])) {
+        $errors[] = 'Número de teléfono inválido';
     }
 
     // Validate residencia
@@ -231,6 +231,7 @@ if (isset($_POST['csv'])) {
                 </select>
             </div>
             <div class="mb-4">
+                <label for="fecha_nacimiento">Fecha de nacimiento</label>
                 <input type="date" name="fecha_nacimiento" class="form-control bg-gray-700 text-white border-none p-2 w-full" placeholder="Fecha de Nacimiento" required>
             </div>
             <div class="mb-4">
