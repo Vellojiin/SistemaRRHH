@@ -38,7 +38,6 @@ if ((empty($nombre_usuario) or empty($contrasena))) {
         if ($intentos_login >= MAX_NUMBER_OF_TRIES) {
             // Calcular el tiempo restante para volver a intentar
             $tiempo_restante = ($ultima_conexion + $tiempo_espera) - $hora_actual;
-            echo $tiempo_restante;
 
             // Si el tiempo restante es mayor que cero, significa que aún no puede volver a intentar
             if ($tiempo_restante > 0) {
