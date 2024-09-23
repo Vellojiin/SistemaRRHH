@@ -15,19 +15,59 @@ if ((empty($nombre_usuario) or empty($contrasena))) {
     $message = 'Los datos ingresados son invalidos!';
 } else {
     $conn = Database::Conectar();
-    $records = $conn->prepare('SELECT id, nombre_usuario, contrasena FROM usuarios WHERE nombre_usuario = :nombre_usuario'); //Preparar la consulta
+
+    // TOOD: Renombrar `ultima_conexion` a `fecha_proxima_conexion`
+    $records = $conn->prepare('SELECT id, nombre_usuario, contrasena, intentos_login, ultima_conexion FROM usuarios WHERE nombre_usuario = :nombre_usuario'); //Preparar la consulta
 
     $records->bindParam(':nombre_usuario', $nombre_usuario_sanitizado); //Asignar valores a los parametros
     $records->execute(); //Ejecutar la consulta
     $results = $records->fetch(PDO::FETCH_ASSOC); //Obtener los resultados
-
     $message = ''; //Variable para almacenar mensajes
-
-    if (count($results) > 0 && password_verify($contrasena, $results['contrasena'])) { //Verificar si el usuario existe y la contraseña es correcta
-        $_SESSION['user_id'] = $results['id']; // Almacenar el id del usuario en la sesion
-        header("Location: home.php"); //Redirigir a home.php
+    if (count($results) == 0) {
+        $message = "No existe ningun usuario";
     } else {
-        $message = 'Lo siento, las credenciales no coinciden';
+        $intentos_login = $results['intentos_login']; //guarda el numero de intentos
+        $ultima_conexion = strtotime($results['ultima_conexion']); // Convierte el timestamp de la última conexión a formato Unix
+
+        // Definir el tiempo de espera en segundos (por ejemplo, 15 minutos = 900 segundos)
+        $tiempo_espera = 900; // 15 minutos
+        $hora_actual = time(); // Hora actual en timestamp
+        $tiempo_restante = 0; // Tiempo restante para volver a intentar
+
+        // Si el número de intentos ha alcanzado el máximo permitido
+        if ($intentos_login >= MAX_NUMBER_OF_TRIES) {
+            // Calcular el tiempo restante para volver a intentar
+            $tiempo_restante = ($ultima_conexion + $tiempo_espera) - $hora_actual;
+            echo $tiempo_restante;
+
+            // Si el tiempo restante es mayor que cero, significa que aún no puede volver a intentar
+            if ($tiempo_restante > 0) {
+                $minutos_restantes = floor($tiempo_restante / 60);
+                $segundos_restantes = $tiempo_restante % 60;
+                $message = "Vuelve a intentarlo en $minutos_restantes minutos y $segundos_restantes segundos.";
+            } else {
+                // Si el tiempo de espera ha pasado, restablecer los intentos de login
+                $intentos_login = 0;
+                $stmt = $conn->prepare('UPDATE usuarios SET intentos_login = :intentos_login WHERE nombre_usuario = :nombre_usuario');
+                $stmt->bindParam(':intentos_login', $intentos_login);
+                $stmt->bindParam(':nombre_usuario', $nombre_usuario_sanitizado);
+                $stmt->execute();
+            }
+        } else {
+            if (password_verify($contrasena, $results['contrasena'])) { //Verificar si el usuario existe y la contraseña es correcta
+                $_SESSION['user_id'] = $results['id']; // Almacenar el id del usuario en la sesion
+                header("Location: home.php"); //Redirigir a home.php
+            } else {
+                $message = 'Lo siento, las credenciales no coinciden';
+                $intentos_login++;
+                $stmt = $conn->prepare('UPDATE usuarios SET intentos_login = :intentos_login, ultima_conexion = :ultima_conexion WHERE id = :id');
+                $ultima_conexion_actualizada = date('Y-m-d H:i:s', $hora_actual); // Convertir a formato de timestamp MySQL
+                $stmt->bindParam(':intentos_login', $intentos_login);
+                $stmt->bindParam(':ultima_conexion', $ultima_conexion_actualizada); // Actualizar la última conexión
+                $stmt->bindParam(':id', $results['id']);
+                $stmt->execute();
+            }
+        }
     }
 }
 
