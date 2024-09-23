@@ -1,25 +1,36 @@
 <?php
 session_start(); // Iniciar la sesión
-$_SESSION["newsession"] = $value;
-require 'database.php';
+require_once 'database.php';
+require 'utils.php';
 
-if (!empty($_POST['username']) && !empty($_POST['password'])) { //Verificar si los campos no estan vacios
+$nombre_usuario = $_POST['username'] ?? '';
+$nombre_usuario_sanitizado = preg_replace(INVALID_USERNAME_PATTERN, '', $nombre_usuario);
+$contrasena = $_POST['password'] ?? '';
+$message = '';
+
+// Validar que el nombre de usuario no contenga caracteres raros :p `sqlinjection`
+if ((empty($nombre_usuario) or empty($contrasena))) {
+    $message = '';
+} else if (!isValidUsername($nombre_usuario)) {
+    $message = 'Los datos ingresados son invalidos!';
+} else {
     $conn = Database::Conectar();
     $records = $conn->prepare('SELECT id, nombre_usuario, contrasena FROM usuarios WHERE nombre_usuario = :nombre_usuario'); //Preparar la consulta
 
-    $records->bindParam(':nombre_usuario', $_POST['username']); //Asignar valores a los parametros
+    $records->bindParam(':nombre_usuario', $nombre_usuario_sanitizado); //Asignar valores a los parametros
     $records->execute(); //Ejecutar la consulta
     $results = $records->fetch(PDO::FETCH_ASSOC); //Obtener los resultados
 
     $message = ''; //Variable para almacenar mensajes
 
-    if (count($results) > 0 && password_verify($_POST['password'], $results['contrasena'])) { //Verificar si el usuario existe y la contraseña es correcta
+    if (count($results) > 0 && password_verify($contrasena, $results['contrasena'])) { //Verificar si el usuario existe y la contraseña es correcta
         $_SESSION['user_id'] = $results['id']; // Almacenar el id del usuario en la sesion
         header("Location: home.php"); //Redirigir a home.php
     } else {
         $message = 'Lo siento, las credenciales no coinciden';
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +59,9 @@ if (!empty($_POST['username']) && !empty($_POST['password'])) { //Verificar si l
                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Ingresar</button>
             </form>
             <p>
-
+                <?php
+                echo $message;
+                ?>
             </p>
             <div class="text-center mt-4">
                 <a href="register.php" class="text-indigo-500 hover:text-indigo-400">¿No Tienes cuenta? Registrate</a>
