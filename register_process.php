@@ -1,7 +1,7 @@
 <?php
 // Incluir la clase de conexión
 require_once 'Database.php';
-
+require 'utils.php';
 // Conectar a la base de datos
 $pdo = Database::Conectar();
 
